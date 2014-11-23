@@ -47,6 +47,16 @@ public class MyActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == REQUEST_TAKE_PHOTO) {
+            if(resultCode == RESULT_OK) {
+                if(mCurrentPhotoPath != "") {
+
+                }
+            }
+        }
+    }
+
     private void openCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
