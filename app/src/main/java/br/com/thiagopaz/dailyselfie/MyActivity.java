@@ -1,8 +1,11 @@
 package br.com.thiagopaz.dailyselfie;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -19,11 +22,34 @@ public class MyActivity extends ActionBarActivity {
 
     static final int REQUEST_TAKE_PHOTO = 1;
     String mCurrentPhotoPath;
+    private AlarmManager mAlarmManager;
+    private Intent mNotificationReceiverIntent, mLoggerReceiverIntent;
+    private PendingIntent mNotificationReceiverPendingIntent,
+            mLoggerReceiverPendingIntent;
+    private static final long INITIAL_ALARM_DELAY = 2 * 60 * 1000L;
+    protected static final long JITTER = 5000L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
+        
+        initAlarm();
+    }
+
+    private void initAlarm() {
+        mAlarmManager.cancel(mNotificationReceiverPendingIntent);
+
+        mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        mNotificationReceiverIntent = new Intent(MyActivity.this,AlarmNotificationReceiver.class);
+        mNotificationReceiverPendingIntent = PendingIntent.getBroadcast(
+                MyActivity.this, 0, mNotificationReceiverIntent, 0);
+
+        mAlarmManager.setInexactRepeating(
+                AlarmManager.ELAPSED_REALTIME,
+                SystemClock.elapsedRealtime() + INITIAL_ALARM_DELAY,
+                AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+                mNotificationReceiverPendingIntent);
     }
 
 
