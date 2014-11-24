@@ -20,6 +20,7 @@ import java.util.Date;
 
 public class MyActivity extends ActionBarActivity {
 
+    private static final String TAG = "MyActivity";
     static final int REQUEST_TAKE_PHOTO = 1;
     String mCurrentPhotoPath;
     private AlarmManager mAlarmManager;
