@@ -41,22 +41,28 @@ public class MyActivity extends ActionBarActivity {
 
     private DatabaseOpenHelper mDbHelper;
     private MyCursorAdapter mAdapter;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
 
-        ListView listView = (ListView) findViewById(R.id.list);
+        listView = (ListView) findViewById(R.id.list);
         initAlarm();
 
         mDbHelper = new DatabaseOpenHelper(this);
-        Cursor c = readPhotos();
 
-        mAdapter = new MyCursorAdapter(this,c,0);
+        getData();
 
         listView.setAdapter(mAdapter);
 
+    }
+
+    private void getData() {
+        Cursor c = readPhotos();
+
+        mAdapter = new MyCursorAdapter(this,c,0);
     }
 
     private Cursor readPhotos() {
@@ -111,6 +117,9 @@ public class MyActivity extends ActionBarActivity {
                     values.put(DatabaseOpenHelper.PHOTO_PATH, mCurrentPhotoPath);
                     values.put(DatabaseOpenHelper.PHOTO_DATE, new Date().toString());
                     mDbHelper.getWritableDatabase().insert(DatabaseOpenHelper.TABLE_NAME, null, values);
+
+                    getData();
+                    mAdapter.notifyDataSetChanged();
                 }
             }
             else {
@@ -156,7 +165,7 @@ public class MyActivity extends ActionBarActivity {
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
 }
