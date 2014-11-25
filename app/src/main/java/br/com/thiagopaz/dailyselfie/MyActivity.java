@@ -2,7 +2,9 @@ package br.com.thiagopaz.dailyselfie;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.SystemClock;
@@ -12,11 +14,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import br.com.thiagopaz.dailyselfie.adapters.MyArrayAdapter;
+import br.com.thiagopaz.dailyselfie.adapters.MyCursorAdapter;
 
 
 public class MyActivity extends ActionBarActivity {
@@ -32,12 +39,30 @@ public class MyActivity extends ActionBarActivity {
     private static final long INITIAL_ALARM_DELAY = 60 * 1000L;
     protected static final long JITTER = 5000L;
 
+    private DatabaseOpenHelper mDbHelper;
+    private MyCursorAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
-        
+
+        ListView listView = (ListView) findViewById(R.id.list);
         initAlarm();
+
+        mDbHelper = new DatabaseOpenHelper(this);
+        Cursor c = readPhotos();
+
+        mAdapter = new MyCursorAdapter(this,c,0);
+
+        listView.setAdapter(mAdapter);
+
+    }
+
+    private Cursor readPhotos() {
+        return mDbHelper.getWritableDatabase().query(DatabaseOpenHelper.TABLE_NAME,
+                DatabaseOpenHelper.columns, null, new String[] {}, null, null,
+                null);
     }
 
     private void initAlarm() {
@@ -82,9 +107,18 @@ public class MyActivity extends ActionBarActivity {
         if(requestCode == REQUEST_TAKE_PHOTO) {
             if(resultCode == RESULT_OK) {
                 if(mCurrentPhotoPath != "") {
-
+                    ContentValues values = new ContentValues();
+                    values.put(DatabaseOpenHelper.PHOTO_PATH, mCurrentPhotoPath);
+                    values.put(DatabaseOpenHelper.PHOTO_DATE, new Date().toString());
+                    mDbHelper.getWritableDatabase().insert(DatabaseOpenHelper.TABLE_NAME, null, values);
                 }
             }
+            else {
+                Log.i(TAG,"ERRO1: " + mCurrentPhotoPath);
+            }
+        }
+        else {
+            Log.i(TAG,"ERRO2: " + mCurrentPhotoPath);
         }
     }
 

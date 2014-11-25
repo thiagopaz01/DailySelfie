@@ -33,11 +33,13 @@ public class Selfie {
         this.thumbPath = thumbPath;
     }
 
-    public Date getDateImage() {
-        return dateImage;
-    }
+    public Date getDateImage() { return dateImage; }
 
     public void setDateImage(Date dateImage) {
         this.dateImage = dateImage;
+    }
+
+    public String getFormatedDate() {
+        return this.dateImage.toString();
     }
 }
