@@ -21,8 +21,11 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         mNotificationIntent = new Intent(context, MyActivity.class);
 
+        /*mContentIntent = PendingIntent.getActivity(context, 0,
+                mNotificationIntent, PendingIntent.FLAG_ONE_SHOT);*/
+
         mContentIntent = PendingIntent.getActivity(context, 0,
-                mNotificationIntent, PendingIntent.FLAG_ONE_SHOT);
+                mNotificationIntent, Intent.FLAG_ACTIVITY_NEW_TASK);
 
         Notification.Builder notificationBuilder = new Notification.Builder(
                 context).setTicker(tickerText)

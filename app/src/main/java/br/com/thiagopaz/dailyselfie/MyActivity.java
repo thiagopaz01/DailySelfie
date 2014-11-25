@@ -9,6 +9,7 @@ import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -27,7 +28,8 @@ public class MyActivity extends ActionBarActivity {
     private Intent mNotificationReceiverIntent, mLoggerReceiverIntent;
     private PendingIntent mNotificationReceiverPendingIntent,
             mLoggerReceiverPendingIntent;
-    private static final long INITIAL_ALARM_DELAY = 2 * 60 * 1000L;
+    private static final long TWO_MINUTES = 2 * 60 * 1000L;
+    private static final long INITIAL_ALARM_DELAY = 60 * 1000L;
     protected static final long JITTER = 5000L;
 
     @Override
@@ -39,17 +41,19 @@ public class MyActivity extends ActionBarActivity {
     }
 
     private void initAlarm() {
-        mAlarmManager.cancel(mNotificationReceiverPendingIntent);
+        //mAlarmManager.cancel(mNotificationReceiverPendingIntent);
 
         mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         mNotificationReceiverIntent = new Intent(MyActivity.this,AlarmNotificationReceiver.class);
         mNotificationReceiverPendingIntent = PendingIntent.getBroadcast(
                 MyActivity.this, 0, mNotificationReceiverIntent, 0);
 
-        mAlarmManager.setInexactRepeating(
-                AlarmManager.ELAPSED_REALTIME,
+        /*mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),
+                TWO_MINUTES, mNotificationReceiverPendingIntent);*/
+
+        mAlarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME,
                 SystemClock.elapsedRealtime() + INITIAL_ALARM_DELAY,
-                AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+                TWO_MINUTES,
                 mNotificationReceiverPendingIntent);
     }
 
@@ -94,7 +98,7 @@ public class MyActivity extends ActionBarActivity {
                 photoFile = createImageFile();
             } catch (IOException ex) {
                 // Error occurred while creating the File
-
+                Log.e(TAG,ex.getMessage());
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
