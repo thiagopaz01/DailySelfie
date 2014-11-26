@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
@@ -56,6 +57,13 @@ public class MyActivity extends ActionBarActivity {
         getData();
 
         listView.setAdapter(mAdapter);
+
+        listView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
     }
 
@@ -119,6 +127,7 @@ public class MyActivity extends ActionBarActivity {
                     mDbHelper.getWritableDatabase().insert(DatabaseOpenHelper.TABLE_NAME, null, values);
 
                     getData();
+                    mAdapter.notifyDataSetInvalidated();
                     mAdapter.notifyDataSetChanged();
                 }
             }
