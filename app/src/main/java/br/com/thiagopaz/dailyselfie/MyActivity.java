@@ -16,18 +16,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import br.com.thiagopaz.dailyselfie.adapters.MyArrayAdapter;
 import br.com.thiagopaz.dailyselfie.adapters.MyCursorAdapter;
-import br.com.thiagopaz.dailyselfie.entity.Selfie;
 
 
 public class MyActivity extends ActionBarActivity {
@@ -36,13 +32,8 @@ public class MyActivity extends ActionBarActivity {
     static final int REQUEST_TAKE_PHOTO = 1;
     static final String PHOTO_PATH = "br.com.thiagopaz.dailyselfie.PHOTO_PATH";
     String mCurrentPhotoPath;
-    private AlarmManager mAlarmManager;
-    private Intent mNotificationReceiverIntent, mLoggerReceiverIntent;
-    private PendingIntent mNotificationReceiverPendingIntent,
-            mLoggerReceiverPendingIntent;
     private static final long TWO_MINUTES = 2 * 60 * 1000L;
     private static final long INITIAL_ALARM_DELAY = 60 * 1000L;
-    protected static final long JITTER = 5000L;
 
     private DatabaseOpenHelper mDbHelper;
     private MyCursorAdapter mAdapter;
@@ -93,9 +84,9 @@ public class MyActivity extends ActionBarActivity {
     private void initAlarm() {
         //mAlarmManager.cancel(mNotificationReceiverPendingIntent);
 
-        mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        mNotificationReceiverIntent = new Intent(MyActivity.this,AlarmNotificationReceiver.class);
-        mNotificationReceiverPendingIntent = PendingIntent.getBroadcast(
+        AlarmManager mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent mNotificationReceiverIntent = new Intent(MyActivity.this, AlarmNotificationReceiver.class);
+        PendingIntent mNotificationReceiverPendingIntent = PendingIntent.getBroadcast(
                 MyActivity.this, 0, mNotificationReceiverIntent, 0);
 
         /*mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),
@@ -131,7 +122,7 @@ public class MyActivity extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_TAKE_PHOTO) {
             if(resultCode == RESULT_OK) {
-                if(mCurrentPhotoPath != "") {
+                if(!mCurrentPhotoPath.equals("")) {
                     ContentValues values = new ContentValues();
                     values.put(DatabaseOpenHelper.PHOTO_PATH, mCurrentPhotoPath);
                     values.put(DatabaseOpenHelper.PHOTO_DATE, new Date().toString());

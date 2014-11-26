@@ -9,9 +9,6 @@ import android.content.Intent;
 
 public class AlarmNotificationReceiver extends BroadcastReceiver {
     private static final int MY_NOTIFICATION_ID = 1;
-    private static final String TAG = "AlarmNotificationReceiver";
-    private Intent mNotificationIntent;
-    private PendingIntent mContentIntent;
 
     private final CharSequence tickerText = "Time for another selfie";
     private final CharSequence contentTitle = "Daily Selfie";
@@ -19,12 +16,9 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        mNotificationIntent = new Intent(context, MyActivity.class);
+        Intent mNotificationIntent = new Intent(context, MyActivity.class);
 
-        /*mContentIntent = PendingIntent.getActivity(context, 0,
-                mNotificationIntent, PendingIntent.FLAG_ONE_SHOT);*/
-
-        mContentIntent = PendingIntent.getActivity(context, 0,
+        PendingIntent mContentIntent = PendingIntent.getActivity(context, 0,
                 mNotificationIntent, Intent.FLAG_ACTIVITY_NEW_TASK);
 
         Notification.Builder notificationBuilder = new Notification.Builder(

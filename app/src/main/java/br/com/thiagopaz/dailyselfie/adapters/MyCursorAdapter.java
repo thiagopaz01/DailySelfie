@@ -15,9 +15,6 @@ import java.io.File;
 
 import br.com.thiagopaz.dailyselfie.R;
 
-/**
- * Created by thiago.fernandes on 25/11/2014.
- */
 public class MyCursorAdapter extends CursorAdapter {
     public MyCursorAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
@@ -26,9 +23,7 @@ public class MyCursorAdapter extends CursorAdapter {
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View retView = inflater.inflate(R.layout.rowlayout, parent, false);
-
-        return retView;
+        return inflater.inflate(R.layout.rowlayout, parent, false);
     }
 
     @Override
@@ -57,14 +52,10 @@ public class MyCursorAdapter extends CursorAdapter {
             // Decode the image file into a Bitmap sized to fill the View
             bmOptions.inJustDecodeBounds = false;
             bmOptions.inSampleSize = scaleFactor;
-            bmOptions.inPurgeable = true;
+            //bmOptions.inPurgeable = true;
 
             Bitmap bitmap = BitmapFactory.decodeFile(cursor.getString(1), bmOptions);
             imageView.setImageBitmap(bitmap);
-
-
-
-            //imageView.setImageBitmap(BitmapFactory.decodeFile(imgFile.getAbsolutePath()));
         }
     }
 }

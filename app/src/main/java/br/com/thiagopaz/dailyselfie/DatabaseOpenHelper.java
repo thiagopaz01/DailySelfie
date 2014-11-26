@@ -4,9 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Created by thiago.fernandes on 25/11/2014.
- */
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
     final static String TABLE_NAME = "selfies";
     final static String PHOTO_PATH = "photo_path";
@@ -21,11 +18,9 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     final private static String NAME = "selfies_db";
     final private static Integer VERSION = 1;
-    final private Context mContext;
 
     public DatabaseOpenHelper(Context context) {
         super(context, NAME, null, VERSION);
-        this.mContext = context;
     }
 
     @Override
