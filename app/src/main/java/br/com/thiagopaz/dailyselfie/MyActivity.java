@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
@@ -25,12 +27,14 @@ import java.util.Date;
 
 import br.com.thiagopaz.dailyselfie.adapters.MyArrayAdapter;
 import br.com.thiagopaz.dailyselfie.adapters.MyCursorAdapter;
+import br.com.thiagopaz.dailyselfie.entity.Selfie;
 
 
 public class MyActivity extends ActionBarActivity {
 
     private static final String TAG = "MyActivity";
     static final int REQUEST_TAKE_PHOTO = 1;
+    static final String PHOTO_PATH = "br.com.thiagopaz.dailyselfie.PHOTO_PATH";
     String mCurrentPhotoPath;
     private AlarmManager mAlarmManager;
     private Intent mNotificationReceiverIntent, mLoggerReceiverIntent;
@@ -58,10 +62,17 @@ public class MyActivity extends ActionBarActivity {
 
         listView.setAdapter(mAdapter);
 
-        listView.setOnClickListener(new View.OnClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cursor c = readPhotos();
+                c.moveToPosition(position);
+                String path = c.getString(1);
+                //Log.i(TAG,path);
 
+                Intent intent = new Intent(MyActivity.this, SelfieActivity.class);
+                intent.putExtra(PHOTO_PATH, path);
+                startActivity(intent);
             }
         });
 
@@ -69,8 +80,8 @@ public class MyActivity extends ActionBarActivity {
 
     private void getData() {
         Cursor c = readPhotos();
-
         mAdapter = new MyCursorAdapter(this,c,0);
+
     }
 
     private Cursor readPhotos() {
@@ -129,6 +140,8 @@ public class MyActivity extends ActionBarActivity {
                     getData();
                     mAdapter.notifyDataSetInvalidated();
                     mAdapter.notifyDataSetChanged();
+                    listView.setAdapter(mAdapter);
+                    listView.postInvalidate();
                 }
             }
             else {

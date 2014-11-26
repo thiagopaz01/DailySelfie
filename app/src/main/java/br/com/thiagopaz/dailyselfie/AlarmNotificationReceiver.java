@@ -13,9 +13,9 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
     private Intent mNotificationIntent;
     private PendingIntent mContentIntent;
 
-    private final CharSequence tickerText = "Are You Playing Angry Birds Again!";
-    private final CharSequence contentTitle = "A Kind Reminder";
-    private final CharSequence contentText = "Get back to studying!!";
+    private final CharSequence tickerText = "Time for another selfie";
+    private final CharSequence contentTitle = "Daily Selfie";
+    private final CharSequence contentText = "Time for another selfie";
 
     @Override
     public void onReceive(Context context, Intent intent) {

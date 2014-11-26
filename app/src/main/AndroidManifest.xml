@@ -20,6 +20,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="br.com.thiagopaz.dailyselfie.SelfieActivity"
+            android:label="@string/app_name"
+            android:parentActivityName="br.com.thiagopaz.dailyselfie.MyActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.thiagopaz.dailyselfie.MyActivity" />
+        </activity>
 
         <receiver android:name=".AlarmNotificationReceiver" >
         </receiver>
